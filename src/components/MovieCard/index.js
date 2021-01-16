@@ -1,11 +1,13 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import NominateBtn from '../NominateBtn';
 
 const MovieCard = (props) => {
+	
+
 	return (
 		<Container>
 			<Row>
@@ -14,9 +16,7 @@ const MovieCard = (props) => {
 						<Card.Body>
 							<Card.Title>Title: {props.title}</Card.Title>
 							<Card.Text>Release Year: {props.year}</Card.Text>
-							<Button 
-								variant="outline-secondary">Nominate
-							</Button>
+							<NominateBtn {...props} />
 						</Card.Body>
 					</Card>
 				</Col>
