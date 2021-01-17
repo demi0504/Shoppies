@@ -16,6 +16,8 @@ class MovieList extends Component {
 			newMovie: '',
 			searchTerm: ''
 		};
+		this.nominateClick = this.nominateClick.bind(this);
+		
 	}
   
 	handleFormSubmit = event => {
@@ -35,7 +37,6 @@ class MovieList extends Component {
 				this.setState({
 					results
 				});
-				console.log("whatwedoin: ", results);
 			});
 	}
 
@@ -45,39 +46,18 @@ class MovieList extends Component {
 		});	
 	};
 
-	// nominateClick(e) {
-		
-	// 	// console.log("value", event.target.value)
-	// 	const movie = e.target.value;
-	// 	if(localStorage.getItem('nominatedList') == null) {
-	// 		const nominatedList = [];
-	// 		nominatedList.push(movie);
-	// 		localStorage.setItem('nominatedList', JSON.stringify(nominatedList));
-	// 	} else {
-	// 		const nominatedList = JSON.parse(localStorage.getItem('nominatedList'));
-	// 		nominatedList.push(movie);
-	// 		localStorage.setItem('nominatedList', JSON.stringify(nominatedList));
-	// 	}
-	// };
-
-	// componentDidMount() {
-	// 	this.nominated = JSON.parse(localStorage.getItem("nominated"))
-	// 	if (localStorage.getItem("nominated")) {
-	// 		this.setState({
-	// 			nominated: ''
-	// 		})}
-	// 		else {
-	// 			this.setState({
-	// 				nominated: ''
-	// 			})
-	// 		}
-	// 	};
-	
-
 	nominateClick = event => {
-		const newMovie = event.target.value;
+		if (this.checkNominationLimit()) {
+			alert("limit 5 nom")
+			return false
+		};
+	
+		const newMovie = {
+			id: 1 + Math.random(),
+			value: event.target.value
+		};
 		
-		const nominated = [this.state.nominated];
+		const nominated = this.state.nominated;
 
 		nominated.push(newMovie);
 
@@ -85,10 +65,65 @@ class MovieList extends Component {
 			nominated, 
 			newMovie: ''
 		});
-
-		localStorage.setItem("nominated", JSON.stringify(nominated));
-		localStorage.setItem("newMovie", '');
 	}
+
+	getNominated() {
+		for (let key in this.state) {
+			if(localStorage.hasOwnProperty(key)) {
+				let value = localStorage.getItem(key);
+
+				try {
+					value = JSON.parse(value);
+					this.setState({ [key]: value });
+				} catch (e) {
+					this.setState({ [key]: value });
+				}
+			}
+		}
+	}
+
+	checkNominationLimit() {
+		// return true if hit limit return false is not hit limit
+	
+		return this.state.nominated.length > 4
+		
+	}
+
+	componentDidMount() {
+		this.getNominated();
+		
+		
+
+		window.addEventListener(
+			"beforeunload",
+			this.saveStateToLocalStorage.bind(this)
+		);
+	};
+
+	componentWillUnmount() {
+    window.removeEventListener(
+      "beforeunload",
+      this.saveStateToLocalStorage.bind(this)
+    );
+
+    // saves if component has a chance to unmount
+    this.saveStateToLocalStorage();
+	}
+
+	saveStateToLocalStorage() {
+		for (let key in this.state) {
+			localStorage.setItem(key, JSON.stringify(this.state[key]));
+		}
+	};
+
+	deleteMovie(id) {
+    // copy current list of items
+    const nominated = [...this.state.nominated];
+    // filter out the item being deleted
+    const updatedList = nominated.filter(item => item.id !== id);
+
+    this.setState({ nominated: updatedList });
+  }
 
 	render() {
 		return (
@@ -108,6 +143,8 @@ class MovieList extends Component {
 									title={result.Title}
 									year={result.Year}
 									nominateClick={this.nominateClick}
+									// isDisabled={this.state.isDisabled}
+									
 								/>
 							)
 						})}
@@ -119,7 +156,18 @@ class MovieList extends Component {
 					<Row>
 						<Col>
 							<h1>My Nominations: </h1>
-							<li>{this.state.nominated}</li>
+							<ul>
+								{this.state.nominated.map(item => {
+									return (
+										<li key={item.id}>
+											{item.value}
+											<button onClick={() => this.deleteMovie(item.id)}>
+												Remove
+											</button>
+										</li>
+									);
+								})}
+							</ul>
 						</Col>
 					</Row>
 				</Container>

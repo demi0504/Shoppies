@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from 'react-bootstrap/Button';
 
 // ...props, spread all of the passed props onto this element
-function NominateBtn(props) {
-	
+const NominateBtn = props => {
+	const [ isDisabled, setIsDisabled ] = useState(false);
+
+  const handleClick = (event) => {
+    
+    setIsDisabled(true);
+    props.nominateClick(event);
+  }
 
   return (
     <Button 
@@ -11,7 +17,9 @@ function NominateBtn(props) {
       tabIndex="0"
 			variant="outline-secondary"
 			value={props.title}
-			onClick={props.nominateClick}>
+      onClick={handleClick}
+      disabled={isDisabled}
+      >
       Nominate
     </Button>
   );
