@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import './style.css';
 
 class MovieList extends Component {
 	constructor(props) {
@@ -128,7 +129,7 @@ class MovieList extends Component {
 	render() {
 		return (
 			<div>
-				<Container>
+				<Container fluid>
 					<Row>
 						<Col>
 						<SearchInput
@@ -142,28 +143,23 @@ class MovieList extends Component {
 									key={result.imdbID}
 									title={result.Title}
 									year={result.Year}
+									poster={result.Poster}
 									nominateClick={this.nominateClick}
-									// isDisabled={this.state.isDisabled}
-									
 								/>
 							)
 						})}
 						</Col>
-					</Row>
-				</Container>
-				{/* Begin Nominated list */}
-				<Container>
-					<Row>
-						<Col>
+						{/* Begin Nominated list */}
+						<Col className="nom">
 							<h1>My Nominations: </h1>
 							<ul>
 								{this.state.nominated.map(item => {
 									return (
-										<li key={item.id}>
+										<li className="nom-list" key={item.id}>
 											{item.value}
-											<button onClick={() => this.deleteMovie(item.id)}>
+											<Button className="remove-btn" variant="outline-light" onClick={() => this.deleteMovie(item.id)}>
 												Remove
-											</button>
+											</Button>
 										</li>
 									);
 								})}

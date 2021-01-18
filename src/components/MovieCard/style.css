@@ -1,0 +1,13 @@
+.title {
+    font-weight: 700;
+}
+
+.img-style {
+    float: left;
+    height: 160px;
+    width: 150px;
+}
+
+.margin {
+    margin: 10px;
+}
