@@ -6,7 +6,7 @@ import Jumbotron from "../Jumbotron";
 const Home = () => {
   return (
     <div>
-    {/* <Jumbotron /> */}
+    <Jumbotron />
     <MovieList />
     </div>
   );

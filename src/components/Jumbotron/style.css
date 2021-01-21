@@ -1,15 +1,7 @@
 .jumbotron {
-  height: 400; 
-  clear: both;
-  padding-top: 120; 
+	background-color: #8B0000;
+	clear: both;
 	color: white;
-	
-}
-
-.jumbotron::before {
-  
-	background-image: url("../../assets/images/popcorn.jpg");
-	background-size: cover;
-	position: absolute;
-	opacity: 0.75;
+  height: 400; 
+  padding-top: 120; 
 }
