@@ -17,10 +17,10 @@ class MovieList extends Component {
 			newMovie: '',
 			searchTerm: ''
 		};
-		this.nominateClick = this.nominateClick.bind(this);
-		
+		this.nominateClick = this.nominateClick.bind(this);	
 	}
-  
+
+  // API call once search button is hit
 	handleFormSubmit = event => {
 		event.preventDefault();
 		axios
@@ -41,16 +41,18 @@ class MovieList extends Component {
 			});
 	}
 
+	// Set state of search term to search input
 	handleChange = event => {
 		this.setState({
 			searchTerm: event.target.value
 		});	
 	};
 
+	// Click handler for nominate button, check local storage, limit nominations
 	nominateClick = event => {
 		if (this.checkNominationLimit()) {
-			alert("limit 5 nom")
-			return false
+			alert("You have reached your nomination limit!");
+			return false;
 		};
 	
 		const newMovie = {
@@ -68,6 +70,7 @@ class MovieList extends Component {
 		});
 	}
 
+	// Check local storage for nominations, set state if so
 	getNominated() {
 		for (let key in this.state) {
 			if(localStorage.hasOwnProperty(key)) {
@@ -83,18 +86,15 @@ class MovieList extends Component {
 		}
 	}
 
+	// Function to limit number of nominations
 	checkNominationLimit() {
 		// return true if hit limit return false is not hit limit
-	
-		return this.state.nominated.length > 4
-		
+		return this.state.nominated.length > 4	
 	}
 
 	componentDidMount() {
 		this.getNominated();
 		
-		
-
 		window.addEventListener(
 			"beforeunload",
 			this.saveStateToLocalStorage.bind(this)
